@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Student {
+    char name[20];
+    int kor;
+    int eng;
+    float avg;
+};
+
+int main() {
+    FILE *file = fopen("sj.txt", "r");
+    if (file == NULL) {
+        printf("Error opening file.\n");
+        return 1;
+    }
+
+    char buffer[100];
+    fgets(buffer, sizeof(buffer), file);
+
+    printf("Name\tKorean\tEnglish\tPersonal Avg\n");
+    struct Student student;
+    int totalKor = 0; 
+    int totalEng = 0; 
+    int studentCount = 0; 
+
+    while (fscanf(file, "%19[^,],%d,%d\n", student.name, &student.kor, &student.eng) == 3) {
+        printf("%s\t%d\t%d\t", student.name, student.kor, student.eng);
+        student.avg = (float)(student.kor + student.eng) / 2.0;
+        printf("%.2f\n", student.avg);
+        totalKor += student.kor;
+        totalEng += student.eng;
+        studentCount++;
+    }
+    float avgKor = (float)totalKor / studentCount;
+    float avgEng = (float)totalEng / studentCount;
+    printf("\nSubject Averages:\n");
+    printf("Korean Avg: %.2f\n", avgKor);
+    printf("English Avg: %.2f\n", avgEng);
+
+    fclose(file);
+    return 0;
+}
